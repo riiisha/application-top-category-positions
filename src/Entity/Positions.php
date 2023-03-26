@@ -20,7 +20,7 @@ class Positions
     #[ORM\Column]
     private ?int $category = null;
 
-    #[ORM\Column(type: Types::DATE_IMMUTABLE)]
+    #[ORM\Column(type: Types::DATE_MUTABLE)]
     private ?\DateTimeInterface $date = null;
 
     public function getId(): ?int

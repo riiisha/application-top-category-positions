@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\Positions;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\Query\ResultSetMappingBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -39,28 +40,20 @@ class PositionsRepository extends ServiceEntityRepository
         }
     }
 
-//    /**
-//     * @return Positions[] Returns an array of Positions objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('p')
-//            ->andWhere('p.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('p.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
+    public function getPositionByDate($date)
+    {
+        $rsm = new ResultSetMappingBuilder($this->_em);
+        $rsm->addScalarResult('category', 'category', 'integer');
+        $rsm->addScalarResult('position', 'position', 'integer');
 
-//    public function findOneBySomeField($value): ?Positions
-//    {
-//        return $this->createQueryBuilder('p')
-//            ->andWhere('p.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+        $query = $this->_em->createNativeQuery(
+            '
+			SELECT 
+			    category,
+			    position
+			FROM positions
+			WHERE date = \'' . $date . '\'', $rsm);
+
+        return $query->getResult();
+    }
 }

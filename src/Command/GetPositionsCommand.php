@@ -17,7 +17,7 @@ use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 
 #[AsCommand(
     name: 'app:get-positions',
-    description: 'Получение позиции приложения в топе за последние 30 дней',
+    description: 'Getting the app\'s position in the top for the last 30 days',
 )]
 class GetPositionsCommand extends Command
 {
@@ -47,7 +47,6 @@ class GetPositionsCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-
         $applicationId = 1421444;
         $countryId = 1;
         $dateFrom = ((new DateTime())->sub(new DateInterval('P30D')))->format('Y-m-d');
@@ -90,15 +89,15 @@ class GetPositionsCommand extends Command
                 }
                 try {
                     $this->em->flush();
-                    $output->writeln("Запись прошла успешно");
+                    $output->writeln("The recording was successful");
                 } catch (\Exception $exception) {
-                    $output->writeln("Ошибка записи" . $exception);
+                    $output->writeln("Recording error: " . $exception);
                 }
             } else {
-                $output->writeln("Ошибка запроса. Status code: " . $response->getStatusCode());
+                $output->writeln("Bad Request. Status code: " . $response->getStatusCode());
             }
         } catch (TransportExceptionInterface $e) {
-            $output->writeln("Ошибка запроса: " . $e);
+            $output->writeln("Bad Request: " . $e);
         }
 
         return Command::SUCCESS;
